@@ -1,5 +1,9 @@
 package task1710;
 
+
+import org.jetbrains.annotations.NotNull;
+
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -59,11 +63,73 @@ public class Solution {
     public static List<Person> allPeople = new ArrayList<Person>();
 
     static {
-        allPeople.add(Person.createMale("Иванов Иван", new Date()));  //сегодня родился    id=0
-        allPeople.add(Person.createMale("Петров Петр", new Date()));  //сегодня родился    id=1
+        allPeople.add(Person.createMale("Иванов Иван", new Date()));  // id=0
+        allPeople.add(Person.createMale("Петров Петр", new Date()));  // id=1
     }
 
-    public static void main(String[] args) {
-        //напишите тут ваш код
+    public static void main(String[] args) throws ParseException {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
+
+        switch (args[0]) {  // Используем args[0] для выбора команды
+            case "-c":
+                createPerson(args, dateFormat);
+                break;
+            case "-r":
+                readPerson(args);
+                break;
+            case "-u":
+                updatePerson(args, dateFormat);
+                break;
+            case "-d":
+                deletePerson(args);
+                break;
+            default:
+                break;
+        }
+        System.out.println(allPeople);
+    }
+
+    private static void createPerson(String[] args, SimpleDateFormat dateFormat) throws ParseException {
+        String name = args[1];
+        Sex sex = "м".equals(args[2]) ? Sex.MALE : Sex.FEMALE;
+        Date bd = dateFormat.parse(args[3]);
+
+        Person person = (sex == Sex.MALE) ? Person.createMale(name, bd) : Person.createFemale(name, bd);
+        allPeople.add(person);
+        System.out.println(allPeople.size() - 1);  // Выводим индекс добавленного человека
+    }
+
+    private static void updatePerson(String[] args, SimpleDateFormat dateFormat) throws ParseException {
+        int id = Integer.parseInt(args[1]);
+        String name = args[2];
+        Sex sex = "м".equals(args[3]) ? Sex.MALE : Sex.FEMALE;
+        Date bd = dateFormat.parse(args[4]);
+
+        Person person = allPeople.get(id);
+        if (person != null) {
+            person.setName(name);
+            person.setSex(sex);
+            person.setBirthDate(bd);
+        }
+    }
+
+    private static void deletePerson(String[] args) {
+        int id = Integer.parseInt(args[1]);
+        Person person = allPeople.get(id);
+
+
+            person.setName(null);
+            person.setSex(null);
+            person.setBirthDate(null);
+
+    }
+
+    private static void readPerson(String[] args) {
+        int id = Integer.parseInt(args[1]);
+        Person person = allPeople.get(id);
+
+        if (person != null) {
+            System.out.println(person);
+        }
     }
 }

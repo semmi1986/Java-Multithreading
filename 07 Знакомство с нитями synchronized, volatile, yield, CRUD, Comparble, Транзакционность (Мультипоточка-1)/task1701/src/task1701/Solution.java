@@ -36,6 +36,7 @@ public class Solution {
 
         public static void addNote(String note) {
             notes.add(0, note);
+//            System.out.println(notes);
         }
 
         public static void removeNote(String threadName) {
@@ -46,6 +47,20 @@ public class Solution {
                 System.out.println("Нить [" + threadName + "] удалила чужую заметку [" + note + "]");
             } else {
                 System.out.println("Нить [" + threadName + "] удалила свою заметку [" + note + "]");
+            }
+        }
+    }
+    public static class NoteThread extends Thread{
+        public void run(){
+            for (int i = 0; i < 1000; i++) {
+
+                try {
+                    Note.addNote(getName() + "-Note" + i);
+                    Thread.sleep(1);
+                    Note.removeNote(getName());
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
             }
         }
     }

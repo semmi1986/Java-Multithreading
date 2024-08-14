@@ -13,24 +13,27 @@ Requirements:
 5. Переменная int proposal не должна находится в локальном кэше.
 */
 
+import java.util.concurrent.Exchanger;
+
 public class Solution {
     public static int proposal = 0;
+    private static Exchanger<Integer> exchanger = new Exchanger<>();
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         new AcceptProposal().start();
         new MakeProposal().start();
+
     }
 
     public static class MakeProposal extends Thread {
         @Override
         public void run() {
-            int thisProposal = proposal;
-
-            while (proposal < 10) {
-                System.out.println("Сделано предложение №" + (thisProposal + 1));
-                proposal = ++thisProposal;
+           while (proposal < 10) {
+                System.out.println("Сделано предложение №" + (proposal + 1));
+                proposal++;
                 try {
                     Thread.sleep(100);
+                    exchanger.exchange(proposal);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -46,9 +49,11 @@ public class Solution {
             int thisProposal = proposal;
 
             while (thisProposal < 10) {
-                if (thisProposal != proposal) {
-                    System.out.println("Принято предложение №" + proposal);
-                    thisProposal = proposal;
+                try {
+                    int acceptedProposal = exchanger.exchange(0);
+                    System.out.println("Принято предложение №" + acceptedProposal);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
                 }
 
             }

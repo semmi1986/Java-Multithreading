@@ -1,10 +1,10 @@
 package task1721;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.InputStreamReader;
+
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 /* 
 Транзакционность
@@ -33,13 +33,54 @@ Requirements:
 */
 
 public class Solution {
-    public static List<String> allLines = new ArrayList<String>();
-    public static List<String> forRemoveLines = new ArrayList<String>();
+    public static List<String> allLines = new ArrayList<>();
+    public static List<String> forRemoveLines = new ArrayList<>();
 
     public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        try {
+            // Считываем имена файлов с консоли
+            System.out.println("enter name 1 file ");
+            String file1 = scanner.nextLine();
+            System.out.println("enter name 2 file ");
+            String file2 = scanner.nextLine();
+
+            // Считываем данные из файлов
+            try {
+                readLinesFromFile(file1, allLines);
+                readLinesFromFile(file2, forRemoveLines);
+            } catch (IOException e) {
+                System.out.println("error reading files: " + e.getMessage());
+                return; // Прерываем выполнение, если возникла ошибка при чтении файлов
+            }
+
+            // Выполняем транзакцию joinData
+            try {
+                joinData();
+                System.out.println("Data successfully joined.");
+            } catch (CorruptedDataException e) {
+                System.out.println("Data corrupted: " + e.getMessage());
+            }
+        } finally {
+            scanner.close();
+        }
     }
 
-    public void joinData() throws CorruptedDataException {
+    private static void readLinesFromFile(String filename, List<String> list) throws IOException {
+        try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                list.add(line);
+            }
+        }
+    }
 
+    public static void joinData() throws CorruptedDataException {
+        if (allLines.containsAll(forRemoveLines)) {
+            allLines.removeAll(forRemoveLines);
+        } else {
+            allLines.clear();
+            throw new CorruptedDataException("Not all lines from 'forRemoveLines' are present in 'allLines'.");
+        }
     }
 }

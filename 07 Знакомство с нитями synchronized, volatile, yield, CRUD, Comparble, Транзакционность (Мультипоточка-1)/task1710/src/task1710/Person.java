@@ -22,14 +22,17 @@ public class Person {
     }
 
     public String getName() {
+
         return name;
     }
 
     public void setName(String name) {
+
         this.name = name;
     }
 
     public Sex getSex() {
+
         return sex;
     }
 
@@ -43,5 +46,10 @@ public class Person {
 
     public void setBirthDate(Date birthDate) {
         this.birthDate = birthDate;
+    }
+
+    @Override
+    public String toString() {
+        return name + " " + (sex == Sex.MALE ? "м" : "ж") + " " + new java.text.SimpleDateFormat("dd-MMM-yyyy", java.util.Locale.ENGLISH).format(birthDate);
     }
 }

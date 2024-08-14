@@ -36,5 +36,25 @@ public class Solution {
         public final List<String> fruits = new ArrayList<String>();
         public final List<String> vegetables = new ArrayList<String>();
 
+        public void addFruit(int index, String fruit){
+            synchronized (fruits){
+                fruits.add(index, fruit);
+            }
+        };
+        public void removeFruit(int index){
+            synchronized (fruits){
+                fruits.remove(index);
+            }
+        };
+        public void addVegetable(int index, String vegetable){
+            synchronized (vegetables){
+                vegetables.add(index, vegetable);
+            }
+        };
+        public void removeVegetable(int index){
+            synchronized (vegetables){
+                vegetables.remove(index);
+            }
+        };
     }
 }
