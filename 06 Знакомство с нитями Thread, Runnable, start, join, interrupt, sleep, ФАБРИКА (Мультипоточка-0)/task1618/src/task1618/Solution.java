@@ -16,9 +16,26 @@ Requirements:
 public class Solution {
     public static void main(String[] args) throws InterruptedException {
         //Add your code here - добавь код тут
+        System.out.println("Main start");
+        TestThread tt = new TestThread();
+        tt.start();
+        Thread.sleep(10);
+        tt.interrupt();
+        tt.join();
+        System.out.println("Main stop");
     }
 
     //Add your code below - добавь код ниже
-    public static class TestThread {
+    public static class TestThread extends Thread {
+        public void run(){
+            for (int i = 0; i < 1000; i++) {
+                System.out.println("eto TestThread " + i);
+                if (isInterrupted()){
+                    System.out.println("Potok prervan");
+                    return;
+                }
+            }
+
+            }
     }
 }

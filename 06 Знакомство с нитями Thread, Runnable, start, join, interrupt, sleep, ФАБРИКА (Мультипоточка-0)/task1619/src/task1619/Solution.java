@@ -15,20 +15,26 @@ Requirements:
 6. Метод main должен вызывать метод ourInterruptMethod.*/
 
 public class Solution {
+    public static boolean isStop = true;
     public static void main(String[] args) throws InterruptedException {
+        System.out.println("Main start");
         Thread t = new Thread(new TestThread());
         t.start();
         Thread.sleep(3000);
+
         ourInterruptMethod();
+        t.join();
+        System.out.println("Main end");
     }
 
     public static void ourInterruptMethod() {
-
+        isStop = false;
+        System.out.println("prervan");
     }
 
     public static class TestThread implements Runnable {
         public void run() {
-            while (true) {
+            while (isStop) {
                 try {
                     System.out.println("he-he");
                     Thread.sleep(500);

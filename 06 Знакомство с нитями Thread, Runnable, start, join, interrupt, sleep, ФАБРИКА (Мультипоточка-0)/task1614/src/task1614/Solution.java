@@ -34,7 +34,7 @@ public class Solution {
     }
 
     public static void main(String[] args) throws InterruptedException {
-        Thread t = new Thread(new Countdown(3), "Countdown");
+        Thread t = new Thread(new Countdown(3));
         t.start();
     }
 
@@ -56,6 +56,10 @@ public class Solution {
 
         public void printCountdown() throws InterruptedException {
             //add your code here - добавь код тут
+
+            countFrom--;
+            System.out.println(list.get(countFrom));
+            Thread.sleep(500);
         }
     }
 }

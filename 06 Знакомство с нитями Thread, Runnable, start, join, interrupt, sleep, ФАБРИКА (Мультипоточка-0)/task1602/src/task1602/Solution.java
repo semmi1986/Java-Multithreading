@@ -20,4 +20,13 @@ public class Solution {
         TestThread thread = new TestThread();
         thread.start();
     }
+
+    public static class TestThread extends Thread{
+        static void message (){
+            System.out.println("it's a static block inside TestThread");
+        }
+        public void run(){
+            System.out.println("it's a run method");
+        }
+    }
 }

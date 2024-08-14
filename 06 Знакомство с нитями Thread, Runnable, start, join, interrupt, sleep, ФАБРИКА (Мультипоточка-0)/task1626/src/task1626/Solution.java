@@ -16,13 +16,34 @@ Requirements:
 public class Solution {
     public static int number = 5;
 
-    public static void main(String[] args) {
-        new Thread(new CountdownRunnable(), "Уменьшаем").start();
-        new Thread(new CountUpRunnable(), "Увеличиваем").start();
+    public static void main(String[] args) throws InterruptedException {
+        Thread cDown = new Thread(new CountdownRunnable(), "Уменьшаем");
+        Thread cUp = new Thread(new CountUpRunnable(), "Увеличиваем");
+        cDown.start();
+        cDown.join();
+        cUp.start();
     }
 
-    public static class CountUpRunnable {
+    public static class CountUpRunnable implements Runnable {
         //Add your code here - добавь код тут
+        private int countIndexUp = 0;
+
+        public void run() {
+            try {
+                while (true) {
+
+                    System.out.println(toString());
+                    countIndexUp += 1;
+                    if (countIndexUp == Solution.number) return;
+                    Thread.sleep(500);
+
+                }
+            } catch (InterruptedException e) {
+            }
+        }
+        public String toString() {
+            return Thread.currentThread().getName() + ": " + countIndexUp;
+        }
     }
 
 

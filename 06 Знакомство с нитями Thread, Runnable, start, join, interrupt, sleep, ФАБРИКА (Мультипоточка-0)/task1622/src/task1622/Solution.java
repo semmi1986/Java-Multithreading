@@ -35,9 +35,10 @@ public class Solution {
         private static volatile int threadCount = 0;
         private volatile int countdownIndex = COUNT;
 
-        public SleepingThread() {
+        public SleepingThread() throws InterruptedException {
             super(String.valueOf(++threadCount));
             start();
+            join();
         }
 
         public void run() {
@@ -45,6 +46,11 @@ public class Solution {
                 System.out.println(this);
                 if (--countdownIndex == 0) return;
                 //напишите тут ваш код
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
             }
         }
 
